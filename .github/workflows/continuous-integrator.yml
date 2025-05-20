@@ -29,7 +29,7 @@ jobs:
           REPOSITORY: ${{ secrets.ECR_NAMESPACE }}/${{ secrets.ECR_REPO_NAME }}
           IMAGE_TAG: latest
         run: |
-          docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
+          docker buildx build --platform linux/amd64,linux/arm64/v8 -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG"
 
