@@ -29,6 +29,15 @@ jobs:
           REPOSITORY: ${{ secrets.ECR_NAMESPACE }}/${{ secrets.ECR_REPO_NAME }}
           IMAGE_TAG: latest
         run: |
+          # 1) 새 빌더 생성 & 사용 설정
+          docker buildx create --name multiarch-builder \
+                              --driver docker-container \
+                              --use
+
+          # 2) QEMU 에뮬레이터 초기화
+          docker buildx inspect --bootstrap
+
+          # 3) 멀티플랫폼 이미지 빌드 
           docker buildx build --platform linux/amd64,linux/arm64/v8 -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG"
