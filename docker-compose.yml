@@ -1,7 +1,7 @@
 services:
   api:
-    # image: public.ecr.aws/${ECR_REGISTRY_ALIAS}/${ECR_NAMESPACE}/${ECR_REPO_NAME}:${VERSION:-latest}
-    image: test:latest
+    image: public.ecr.aws/${ECR_REGISTRY_ALIAS}/${ECR_NAMESPACE}/${ECR_REPO_NAME}:${VERSION:-latest}
+    # image: test:latest
     container_name: ai-api
     ports:
       - "8000:80"
