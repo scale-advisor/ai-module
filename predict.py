@@ -1,21 +1,25 @@
 # predict
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
-import numpy as np
+import joblib  # label encoder 로드용
 
-from .config import max_length
-from .model import load_tokenizer, load_model
+# 모델, 토크나이저 로드
+model_path = "./fp_model_v02"
+tokenizer = AutoTokenizer.from_pretrained(model_path)
+model = AutoModelForSequenceClassification.from_pretrained(model_path)
 
-def predict_fp_type(model, tokenizer, texts, label_encoder):
+# LabelEncoder 로드
+label_encoder = joblib.load("./label_encoder.pkl")
+
+
+def predict_fp_type(texts):
     model.eval()
-    encoded = tokenizer(texts, truncation=True, padding="max_length", max_length=max_length, return_tensors="pt")
+    encoded = tokenizer(texts, truncation=True, padding="max_length", max_length=64, return_tensors="pt")
 
     with torch.no_grad():
         outputs = model(**encoded)
         probs = torch.nn.functional.softmax(outputs.logits, dim=-1)
         preds = torch.argmax(probs, dim=1)
 
-    return label_encoder.inverse_transform(preds.numpy())
-
-    # # json으로 출력하려면 tolist 사용
-    # predicted_labels = label_encoder.inverse_transform(preds.numpy())
-    # return predicted_labels.tolist()
+    predicted_labels = label_encoder.inverse_transform(preds.numpy())
+    return predicted_labels

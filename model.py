@@ -4,7 +4,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments, DataCollatorWithPadding
 from sklearn.metrics import f1_score
 
-from .config import model_name, max_length, batch_size, num_epochs, random_seed
+from config import model_name, max_length, batch_size, num_epochs, random_seed
 
 def load_tokenizer():
     return AutoTokenizer.from_pretrained(model_name)

@@ -3,9 +3,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
-from .dataset import FPDataset
-from .model import load_model, load_tokenizer, create_trainer
-from .config import max_length, random_seed
+from dataset import FPDataset
+from model import load_model, load_tokenizer, create_trainer
+from config import max_length, random_seed
 
 def train_model(data_path):
     df = pd.read_csv(data_path)
